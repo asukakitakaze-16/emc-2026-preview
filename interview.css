@@ -1,0 +1,686 @@
+@charset "UTF-8";
+
+/* ==========================================================================
+   interview.css
+   インタビュー記事ページ専用スタイル
+   ・すべてのセレクタを .iv- プレフィックスで独立させ、他ページ／style.css へ干渉させない
+   ・ヘッダー／フッター／Back to Top は style.css（index.html 準拠）をそのまま使用
+   ========================================================================== */
+
+/* --- ページ全体 --- */
+.iv-page {
+    background-color: #fff;
+    color: #222;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.iv-sp-br {
+    display: none;
+}
+
+/* --- ページ読み込み時アニメーション（Hero） --- */
+@keyframes ivFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.iv-hero-inner>* {
+    opacity: 0;
+    animation: ivFadeInUp 0.9s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.iv-hero-inner>*:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.iv-hero-inner>*:nth-child(2) {
+    animation-delay: 0.25s;
+}
+
+.iv-hero-inner>*:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.iv-hero-inner>*:nth-child(4) {
+    animation-delay: 0.6s;
+}
+
+.iv-hero-inner>*:nth-child(5) {
+    animation-delay: 0.75s;
+}
+
+/* --- Hero --- */
+.iv-hero {
+    background-color: #000;
+    color: #fff;
+    padding: 110px 20px 90px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.iv-hero-inner {
+    width: 100%;
+    max-width: 820px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+}
+
+.iv-crumb {
+    display: flex;
+    gap: 10px;
+    font-family: 'EB Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.iv-crumb a {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.iv-crumb a:hover {
+    color: #c5a365;
+}
+
+.iv-crumb-current {
+    color: #c5a365;
+}
+
+.iv-hero-label {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(14px, 2vw, 20px);
+    letter-spacing: 0.4em;
+    color: #c5a365;
+}
+
+.iv-hero-title {
+    font-size: clamp(30px, 4.5vw, 54px);
+    line-height: 1.6;
+    letter-spacing: 0.15em;
+    font-weight: 400;
+}
+
+.iv-hero-sub {
+    font-size: clamp(15px, 2vw, 20px);
+    letter-spacing: 0.15em;
+    color: #c5a365;
+    font-weight: 400;
+}
+
+.iv-hero-meta {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.65);
+    border-top: 1px solid rgba(197, 163, 101, 0.5);
+    padding-top: 22px;
+}
+
+/* --- メインビジュアル --- */
+.iv-keyvisual {
+    margin: -40px auto 0;
+    max-width: 960px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.iv-keyvisual img {
+    width: 100%;
+    height: auto;
+    display: block;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+}
+
+.iv-caption {
+    margin-top: 14px;
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+    letter-spacing: 0.05em;
+    line-height: 1.8;
+}
+
+/* --- 本文 --- */
+.iv-body {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 80px 20px 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    font-size: 16px;
+    line-height: 2.3;
+    letter-spacing: 0.05em;
+    color: #333;
+}
+
+.iv-lede {
+    font-size: 17px;
+}
+
+/* KEY POINTS */
+.iv-keypoints {
+    border: 1px solid rgba(197, 163, 101, 0.5);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #fcfaf6;
+}
+
+.iv-keypoints-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 15px;
+    letter-spacing: 0.35em;
+    color: #72613b;
+    font-weight: 400;
+}
+
+.iv-keypoints-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.iv-keypoints-list li {
+    font-size: 15px;
+    line-height: 1.9;
+    padding-left: 1.3em;
+    text-indent: -1.3em;
+}
+
+/* 見出し */
+.iv-h2 {
+    margin-top: 36px;
+    font-size: clamp(22px, 3vw, 28px);
+    color: #c5a365;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+    line-height: 1.7;
+    border-left: 1px solid #c5a365;
+    padding-left: 24px;
+}
+
+.iv-h2-person {
+    font-size: clamp(22px, 3vw, 30px);
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    line-height: 1.7;
+    color: #222;
+}
+
+.iv-h3 {
+    margin-top: 20px;
+    font-size: clamp(18px, 2.4vw, 22px);
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    color: #72613b;
+    line-height: 1.8;
+}
+
+.iv-h3-faq {
+    margin-top: 10px;
+    font-size: clamp(17px, 2.2vw, 20px);
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    color: #72613b;
+    line-height: 1.8;
+}
+
+/* インタビュー見出しブロック */
+.iv-head {
+    margin-top: 50px;
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    border-top: 1px solid rgba(197, 163, 101, 0.5);
+    padding-top: 30px;
+}
+
+.iv-head-no {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 60px;
+    line-height: 0.8;
+    color: #c5a365;
+}
+
+.iv-head-label {
+    margin-bottom: 6px;
+    font-family: 'EB Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    color: #72613b;
+}
+
+.iv-head-name {
+    font-size: 15px;
+    letter-spacing: 0.1em;
+    color: #555;
+}
+
+/* 引用 */
+.iv-quote {
+    margin: 10px 0;
+    position: relative;
+    padding: 24px 34px;
+    font-size: clamp(17px, 2.2vw, 21px);
+    line-height: 2.1;
+    letter-spacing: 0.1em;
+    color: #222;
+}
+
+.iv-quote::before,
+.iv-quote::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 15px;
+    height: 100%;
+    border-top: 1px solid #c5a365;
+    border-bottom: 1px solid #c5a365;
+    opacity: 0.8;
+}
+
+.iv-quote::before {
+    left: 0;
+    border-left: 1px solid #c5a365;
+}
+
+.iv-quote::after {
+    right: 0;
+    border-right: 1px solid #c5a365;
+}
+
+/* 本文中の図版 */
+.iv-figure {
+    margin-top: 20px;
+}
+
+.iv-figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.iv-figure .iv-caption {
+    margin-top: 12px;
+}
+
+/* 箇条書き */
+.iv-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.iv-list--tight {
+    gap: 14px;
+}
+
+.iv-list li {
+    font-size: 16px;
+    line-height: 2.1;
+    padding-left: 1.2em;
+    text-indent: -1.2em;
+}
+
+.iv-list-term {
+    color: #72613b;
+}
+
+/* 編集情報 */
+.iv-note {
+    margin-top: 40px;
+    border-top: 1px solid rgba(197, 163, 101, 0.5);
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.iv-note-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    color: #72613b;
+    font-weight: 400;
+}
+
+.iv-note-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+    line-height: 1.9;
+    color: #666;
+}
+
+/* --- CTA --- */
+.iv-cta {
+    padding: 110px 20px;
+    background-color: #000;
+    background-image: url('bg_08.webp');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.iv-cta-inner {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+}
+
+.iv-cta-label {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(14px, 2vw, 20px);
+    letter-spacing: 0.4em;
+    color: #c5a365;
+}
+
+.iv-cta-title {
+    font-size: clamp(26px, 4vw, 44px);
+    color: #b7a664;
+    line-height: 1.6;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+}
+
+.iv-cta-text {
+    font-size: clamp(14px, 2vw, 20px);
+    line-height: 2.2;
+    letter-spacing: 0.1em;
+    color: #eee;
+}
+
+.iv-cta-btns {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.iv-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    height: 64px;
+    width: min(340px, 80vw);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 32px;
+    font-size: 15px;
+    letter-spacing: 0.1em;
+    transition: opacity 0.3s;
+}
+
+.iv-btn:hover {
+    opacity: 0.8;
+    color: #fff;
+}
+
+.iv-btn-brown {
+    background-color: #7b684c;
+}
+
+.iv-btn-gold {
+    background-color: #bea36d;
+}
+
+.iv-btn-icon {
+    width: 1.25em;
+    height: auto;
+    margin-top: -0.1em;
+}
+
+.iv-back {
+    margin-top: 10px;
+    font-family: 'EB Garamond', serif;
+    color: #c5a365;
+    text-decoration: none;
+    font-size: 15px;
+    letter-spacing: 0.15em;
+    border-bottom: 1px solid rgba(197, 163, 101, 0.5);
+    padding-bottom: 3px;
+    transition: color 0.3s;
+}
+
+.iv-back:hover {
+    color: #fff;
+}
+
+/* --- スクロール連動アニメーション --- */
+/* .fade-in / .is-visible は style.css（index.html 共通）を使用。
+   ここでは記事本文向けの補助バリエーションのみ定義する。 */
+
+/* 画像はスケール＋フェードでゆっくり立ち上げる */
+.iv-figure.fade-in,
+.iv-keyvisual.fade-in {
+    transform: translateY(40px);
+}
+
+.iv-figure.fade-in.is-visible,
+.iv-keyvisual.fade-in.is-visible {
+    transform: translateY(0);
+}
+
+.iv-figure.fade-in img,
+.iv-keyvisual.fade-in img {
+    opacity: 0;
+    transform: scale(1.04);
+    transition: opacity 1.4s cubic-bezier(0.25, 1, 0.5, 1), transform 1.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.iv-figure.fade-in.is-visible img,
+.iv-keyvisual.fade-in.is-visible img {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* 番号は少し遅れて浮かび上がらせる */
+.iv-head.fade-in .iv-head-no {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1) 0.25s, transform 1s cubic-bezier(0.25, 1, 0.5, 1) 0.25s;
+}
+
+.iv-head.fade-in.is-visible .iv-head-no {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 引用の罫線を左右から描き出す */
+.iv-quote.fade-in::before,
+.iv-quote.fade-in::after {
+    opacity: 0;
+    transition: opacity 1s ease 0.3s;
+}
+
+.iv-quote.fade-in.is-visible::before,
+.iv-quote.fade-in.is-visible::after {
+    opacity: 0.8;
+}
+
+/* KEY POINTS のリストを1項目ずつ表示 */
+.iv-keypoints.fade-in .iv-keypoints-list li {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.iv-keypoints.fade-in.is-visible .iv-keypoints-list li {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.iv-keypoints.fade-in.is-visible .iv-keypoints-list li:nth-child(1) {
+    transition-delay: 0.15s;
+}
+
+.iv-keypoints.fade-in.is-visible .iv-keypoints-list li:nth-child(2) {
+    transition-delay: 0.28s;
+}
+
+.iv-keypoints.fade-in.is-visible .iv-keypoints-list li:nth-child(3) {
+    transition-delay: 0.41s;
+}
+
+.iv-keypoints.fade-in.is-visible .iv-keypoints-list li:nth-child(4) {
+    transition-delay: 0.54s;
+}
+
+.iv-keypoints.fade-in.is-visible .iv-keypoints-list li:nth-child(5) {
+    transition-delay: 0.67s;
+}
+
+/* 読了プログレスバー（ヘッダー下端に表示） */
+.iv-progress {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    z-index: 999;
+    background-color: rgba(197, 163, 101, 0.15);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.iv-progress.is-active {
+    opacity: 1;
+}
+
+.iv-progress-bar {
+    width: 0;
+    height: 100%;
+    background-color: #c5a365;
+    transform-origin: left center;
+}
+
+/* --- レスポンシブ --- */
+@media (max-width: 900px) {
+    .iv-hero {
+        padding: 80px 20px 70px;
+    }
+
+    .iv-body {
+        padding: 60px 20px 80px;
+    }
+
+    .iv-cta {
+        padding: 80px 20px;
+        background-attachment: scroll;
+    }
+
+    .iv-lede {
+        font-size: 16px;
+    }
+}
+
+/* ヘッダーがオーバーレイ表示になる幅では、プログレスバーを画面最上部へ */
+@media (max-width: 1000px) {
+    .iv-progress {
+        top: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .iv-sp-br {
+        display: block;
+    }
+
+    .iv-hero-title {
+        letter-spacing: 0;
+    }
+
+    .iv-crumb {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .iv-keyvisual {
+        margin-top: -24px;
+    }
+
+    .iv-quote {
+        padding: 22px 24px;
+        font-size: 17px;
+        line-height: 1.9;
+    }
+
+    .iv-btn {
+        width: 100%;
+        max-width: 340px;
+    }
+
+    .iv-cta-btns {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .iv-keypoints {
+        padding: 30px 22px;
+    }
+
+    .iv-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .iv-head-no {
+        font-size: 44px;
+    }
+}
+
+/* --- アニメーションを控えたい環境への配慮 --- */
+@media (prefers-reduced-motion: reduce) {
+
+    .iv-hero-inner>*,
+    .fade-in,
+    .fade-in.is-visible,
+    .iv-figure.fade-in img,
+    .iv-keyvisual.fade-in img,
+    .iv-head.fade-in .iv-head-no,
+    .iv-keypoints.fade-in .iv-keypoints-list li {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .iv-quote.fade-in::before,
+    .iv-quote.fade-in::after {
+        opacity: 0.8 !important;
+    }
+}

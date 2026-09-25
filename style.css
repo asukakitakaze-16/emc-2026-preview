@@ -1,0 +1,3168 @@
+        /* --- 基本リセット --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Shippori Mincho', serif;
+            background-color: #111;
+            overflow-x: hidden;
+        }
+
+        /* --- 新規セクション：Header --- */
+        .header {
+            position: sticky;
+            /* fixedからstickyに変更し、FVと被らないようにする */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 0 40px;
+            height: 60px;
+            /* メニューバーの高さを60pxに固定 */
+            background-color: #000;
+            /* 完全に不透明な黒背景 */
+            display: flex;
+            justify-content: center;
+            /* デフォルトは中央揃え */
+            align-items: center;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .header-logo {
+            position: absolute;
+            left: 40px;
+            top: 20px;
+            /* ヘッダーの上端に合わせる */
+            width: 320px;
+            height: auto;
+            /* メニューバーの高さ(60px)より大きいため、下にはみ出す */
+            display: flex;
+            align-items: center;
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .header-logo.scrolled {
+            width: 180px;
+            top: 8px;
+        }
+
+        .header-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: clamp(15px, 2.5vw, 40px);
+            /* 画面幅に応じて隙間を自動調整 */
+            list-style: none;
+        }
+
+        .header-nav a {
+            color: #fff;
+            text-decoration: none;
+            font-family: 'EB Garamond', serif;
+            font-size: 18px;
+            /* 指示通り */
+            letter-spacing: 0.1em;
+            transition: color 0.3s;
+        }
+
+        .header-nav a:hover {
+            color: #c5a365;
+            /* ホバー時にゴールドへ変更 */
+        }
+
+        /* Contactボタン：金色背景で目立つCTAスタイル */
+        .header-nav li:last-child a {
+            background-color: #c5a365;
+            color: #000;
+            padding: 6px 18px;
+            border-radius: 2px;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        }
+
+        .header-nav li:last-child a:hover {
+            background-color: #e0c080;
+            color: #000;
+            box-shadow: 0 0 12px rgba(197, 163, 101, 0.6);
+        }
+
+        /* --- Report ドロップダウンメニュー（ヘッダー／ドロワー共通） --- */
+        /* 各項目を縦中央で揃え、details（Report）だけ文字がずれるのを防ぐ */
+        .header-nav {
+            align-items: center;
+        }
+
+        .header-nav>li {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .report-accordion {
+            position: relative;
+            font-family: 'EB Garamond', serif;
+        }
+
+        .report-accordion summary {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #fff;
+            font-size: 18px;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            list-style: none;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+
+        .report-accordion summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .report-accordion summary::after {
+            content: '＋';
+            font-family: sans-serif;
+            font-size: 12px;
+            color: #c5a365;
+            transition: transform 0.25s;
+        }
+
+        .report-accordion summary:hover {
+            color: #c5a365;
+        }
+
+        .report-accordion[open] summary {
+            color: #c5a365;
+        }
+
+        .report-accordion[open] summary::after {
+            transform: rotate(45deg);
+        }
+
+        .report-accordion__panel {
+            position: absolute;
+            top: calc(100% + 14px);
+            left: 50%;
+            z-index: 1100;
+            width: 220px;
+            padding: 8px;
+            background: #111;
+            border: 1px solid rgba(197, 163, 101, 0.65);
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.38);
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .report-accordion:not([open]) .report-accordion__panel {
+            display: none;
+        }
+
+        .header-nav .report-accordion__panel a {
+            display: block;
+            padding: 13px 14px;
+            color: #fff;
+            font-family: 'Shippori Mincho', serif;
+            font-size: 14px;
+            letter-spacing: 0.08em;
+            line-height: 1.5;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            white-space: nowrap;
+        }
+
+        .header-nav .report-accordion__panel a:last-child {
+            border-bottom: 0;
+        }
+
+        .header-nav .report-accordion__panel a:hover {
+            color: #c5a365;
+            background: rgba(197, 163, 101, 0.08);
+        }
+
+        .header-nav .report-accordion__panel a[aria-current="page"] {
+            color: #c5a365;
+        }
+
+        /* ドロワー（スマホ）内のReportメニュー */
+        .report-accordion--drawer summary {
+            justify-content: center;
+            color: #222;
+            font-size: 18px;
+        }
+
+        .report-accordion--drawer summary:hover,
+        .report-accordion--drawer[open] summary {
+            color: #99834b;
+        }
+
+        .report-accordion--drawer .report-accordion__panel {
+            position: static;
+            width: 230px;
+            margin-top: 12px;
+            padding: 6px;
+            transform: none;
+            background: #f7f4ee;
+            border: 1px solid rgba(197, 163, 101, 0.3);
+            box-shadow: none;
+        }
+
+        .drawer-nav .report-accordion__panel a {
+            display: block;
+            padding: 11px 14px;
+            font-family: 'Shippori Mincho', serif;
+            color: #222;
+            font-size: 15px;
+            letter-spacing: 0.06em;
+            text-align: center;
+            border-bottom: 1px solid rgba(197, 163, 101, 0.3);
+        }
+
+        .drawer-nav .report-accordion__panel a:last-child {
+            border-bottom: 0;
+        }
+
+        .drawer-nav .report-accordion__panel a[aria-current="page"] {
+            color: #99834b;
+        }
+
+        /* 画面幅が1600px以下になったら、中央揃えだとロゴに被るため右寄せにする */
+        @media (max-width: 1600px) {
+            .header {
+                justify-content: flex-end;
+            }
+        }
+
+        /* 画面幅が1200px以下になったら、文字を小さくし、ロゴも少し縮小して被りを防ぐ */
+        @media (max-width: 1340px) {
+            .header-logo {
+                width: 240px;
+                height: auto;
+                /* 少しはみ出す程度に縮小 */
+            }
+
+            .header-nav {
+                gap: 15px;
+            }
+
+            .header-nav a {
+                font-size: 15px;
+            }
+
+            .report-accordion summary {
+                font-size: 15px;
+            }
+        }
+
+        /* スマホ用の要素は初期非表示 */
+        .hamburger,
+        .drawer,
+        .drawer-overlay {
+            display: none;
+        }
+
+        /* メニュー項目が多いので、1000px以下でハンバーガーメニューに切り替え */
+        @media (max-width: 1000px) {
+            .header-logo img {
+                width: 70%;
+                height: auto;
+            }
+
+            .header-nav {
+                display: none;
+            }
+
+            .header {
+                position: fixed;
+                /* スマホ・タブレット時は従来通りFVの上に被せる */
+                justify-content: flex-end;
+                background-color: transparent;
+                /* スマホ時は透明にしてアイコンだけ見せる */
+                pointer-events: none;
+                /* 下の要素のクリックを妨げないようにする */
+                z-index: 1002;
+                /* ドロワー(z-index:1001)より上に表示させる */
+                padding: 15px 20px;
+                height: auto;
+                /* 高さをリセット */
+            }
+
+            .header-logo {
+                left: 20px;
+                top: 15px;
+                width: clamp(180px, 45vw, 250px);
+                /* スマホ・タブレット時はロゴもレスポンシブに */
+                height: auto;
+                pointer-events: auto;
+                /* スマホ時でもロゴはクリック可能に */
+                background-color: transparent;
+                /* スマホ時は背景を透明に戻す */
+            }
+
+            .header-logo img {
+                height: auto;
+            }
+
+            /* ハンバーガーアイコン */
+            .hamburger {
+                display: block;
+                position: relative;
+                width: 32px;
+                height: 24px;
+                cursor: pointer;
+                pointer-events: auto;
+                /* アイコン自体はクリック可能に */
+                z-index: 1002;
+                /* ドロワーより上に配置 */
+            }
+
+            .hamburger span {
+                position: absolute;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                /* 細い線 */
+                background-color: #fff;
+                transition: all 0.4s ease;
+            }
+
+            .hamburger span:nth-child(1) {
+                top: 0;
+            }
+
+            .hamburger span:nth-child(2) {
+                top: 11.5px;
+            }
+
+            .hamburger span:nth-child(3) {
+                bottom: 0;
+            }
+
+            /* ドロワーオープン時の×アニメーション */
+            .hamburger.is-open span {
+                background-color: #222;
+                /* ドロワーの白背景に合わせて黒線にする */
+            }
+
+            .hamburger.is-open span:nth-child(1) {
+                transform: translateY(11.5px) rotate(45deg);
+            }
+
+            .hamburger.is-open span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.is-open span:nth-child(3) {
+                transform: translateY(-11.5px) rotate(-45deg);
+            }
+
+            /* ドロワーの背景の暗転 */
+            .drawer-overlay {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100svh;
+                background-color: rgba(0, 0, 0, 0.6);
+                z-index: 999;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.4s ease;
+            }
+
+            .drawer-overlay.is-open {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* ドロワーメニュー本体 */
+            .drawer {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                /* 初期は画面右外に隠す */
+                width: 280px;
+                max-width: 80vw;
+                height: 100svh;
+                background-color: #fff;
+                z-index: 1001;
+                padding-top: 100px;
+                /* ×ボタンを避ける */
+                padding-bottom: 40px;
+                overflow-y: auto;
+                transition: right 0.4s ease;
+                box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+            }
+
+            .drawer.is-open {
+                right: 0;
+                /* 右端にスライドイン */
+            }
+
+            .drawer-title {
+                font-family: 'EB Garamond', serif;
+                font-size: 16px;
+                color: #99834b;
+                /* ゴールド */
+                letter-spacing: 0.2em;
+                margin-bottom: 40px;
+            }
+
+            .drawer-nav {
+                list-style: none;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 25px;
+            }
+
+            .drawer-nav a {
+                font-family: 'EB Garamond', serif;
+                font-size: 18px;
+                color: #222;
+                /* 黒文字 */
+                text-decoration: none;
+                letter-spacing: 0.1em;
+            }
+        }
+
+        /* --- FV全体の大枠 --- */
+        .fv {
+            /* PC時は上にヘッダー(約77px)があるため、その分引いて1画面にぴったり収める */
+            height: calc(100svh - 77px);
+            /* 750pxから緩和し、縦幅が狭いノートPC等でも1画面に収まるように */
+            min-height: 550px;
+            background-image: url('bg_01.webp');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .fv-inner {
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            /* 縦幅(vh)が狭い場合は上下の余白も自動で縮小 */
+            padding: clamp(20px, 4vh, 40px) 30px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .fv-top {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(20px, 6vh, 60px);
+            /* 縦幅に合わせてgapを縮小 */
+        }
+
+        .lead-text {
+            /* 横幅だけでなく、縦幅(vh)が狭い時にも文字を小さくする(最大3.5vh) */
+            font-size: min(clamp(16px, 2vw, 27px), 3.5vh);
+            line-height: 2;
+            letter-spacing: 0.2em;
+        }
+
+        .badges {
+            display: flex;
+            gap: 15px;
+        }
+
+        .badges-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-note {
+            font-size: 10px;
+            color: #fff;
+            opacity: 0.8;
+            letter-spacing: 0.05em;
+        }
+
+
+
+        .badge-img {
+            /* 縦幅に合わせてバッジサイズも縮小 */
+            width: clamp(120px, 14vh, 200px);
+            height: clamp(120px, 14vh, 200px);
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .fv-center {
+            text-align: center;
+        }
+
+        .main-copy {
+            /* 縦幅が極端に狭い場合に文字が大きすぎて見切れるのを防ぐ(最大11vh) */
+            font-size: min(clamp(40px, 6vw + 2vh, 99px), 11vh);
+            line-height: 1.5;
+            letter-spacing: 0.2em;
+            font-weight: 500;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .gold-text {
+            color: #c5a365;
+        }
+
+        .circle-mark {
+            font-size: 0.4em;
+            color: #fff;
+            margin-left: 0.1em;
+            vertical-align: bottom;
+            display: inline-block;
+            transform: translateY(-0.3em);
+        }
+
+        .fv-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(15px, 3vh, 30px);
+            /* 縦幅に合わせて縮小 */
+        }
+
+        .bracket-wrapper {
+            position: relative;
+            padding: clamp(15px, 3vh, 30px) 40px;
+            /* 縦幅に合わせて縮小 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(15px, 2.5vh, 25px);
+            /* 縦幅に合わせて縮小 */
+        }
+
+        .bracket-wrapper::before,
+        .bracket-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .bracket-wrapper::before {
+            left: 0;
+            border-right: none;
+        }
+
+        .bracket-wrapper::after {
+            right: 0;
+            border-left: none;
+        }
+
+        .en-title {
+            font-size: min(clamp(14px, 2vw, 32px), 3vh);
+            letter-spacing: 0.3em;
+            opacity: 0.9;
+            text-align: center;
+        }
+
+        .ja-title {
+            font-size: min(clamp(18px, 2vw, 32px), 4vh);
+            letter-spacing: 0.25em;
+            text-align: center;
+            font-weight: 400;
+        }
+
+        .sp-br,
+        .sp-only-br {
+            display: none;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: auto auto;
+            column-gap: 50px;
+            row-gap: clamp(10px, 2vh, 20px);
+            list-style: none;
+        }
+
+        .features li {
+            font-size: min(clamp(14px, 1.5vw, 23px), 2.8vh);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #d1b67e;
+            letter-spacing: 0.1em;
+        }
+
+        .features li::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background-image: url('check.webp');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            flex-shrink: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* 横長・縦幅が狭いモニター専用ボタン：デフォルトは非表示 */
+        .action-buttons-boundary {
+            display: none;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            /* ボタンの高さも縦幅に合わせて縮小 */
+            height: clamp(48px, 7vh, 64px);
+            /* 横幅が狭い場合にも追従 */
+            width: min(340px, 40vw);
+            text-decoration: none;
+            color: #fff;
+            border-radius: 32px;
+            font-size: min(15px, 2vh);
+            letter-spacing: 0.1em;
+            transition: opacity 0.3s;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn-brown {
+            background-color: #7b684c;
+        }
+
+        .btn-gold {
+            background-color: #bea36d;
+        }
+
+        .btn-icon {
+            width: 1.25em;
+            height: auto;
+            display: inline-block;
+            vertical-align: middle;
+            margin-top: -0.1em;
+            /* 微調整 */
+        }
+
+        /* --- Back to Top --- */
+        .back-to-top {
+            position: fixed;
+            right: clamp(20px, 4vw, 40px);
+            bottom: clamp(20px, 4vw, 40px);
+            width: clamp(50px, 8vw, 70px);
+            height: clamp(50px, 8vw, 70px);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: scale(1.1);
+        }
+
+        .back-to-top img {
+            width: 50%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        @media (max-height: 1100px) and (min-width: 601px) {
+            .fv-inner {
+                padding: 15px 30px 60px;
+            }
+
+            .fv-top {
+                gap: 20px;
+            }
+
+            .lead-text {
+                font-size: min(clamp(15px, 1.8vw, 24px), 3vh);
+            }
+
+            .badge-img {
+                width: 16vh;
+                height: 16vh;
+            }
+
+            .main-copy {
+                font-size: min(clamp(35px, 5vw + 1.5vh, 85px), 9vh);
+            }
+
+            .fv-bottom {
+                gap: 15px;
+            }
+
+            .bracket-wrapper {
+                padding: 15px 40px;
+                gap: 10px;
+            }
+
+            .en-title {
+                font-size: min(clamp(12px, 1.8vw, 28px), 2.5vh);
+            }
+
+            .ja-title {
+                font-size: min(clamp(16px, 1.8vw, 28px), 3.5vh);
+            }
+
+            .features {
+                row-gap: 8px;
+            }
+
+            .features li {
+                font-size: min(clamp(13px, 1.4vw, 21px), 2.5vh);
+            }
+
+            .btn {
+                height: 6vh;
+                min-height: 48px;
+            }
+        }
+
+        /* 横長・縦幅が狭いモニター向け：全要素を圧縮しCTAボタンをFVの境目に配置 */
+        @media (max-height: 680px) and (min-width: 601px) {
+            .fv {
+                position: relative;
+                overflow: visible;
+                z-index: 10;
+            }
+
+            /* fv-innerはoverflow: hiddenでリスト等の溢れをクリップ */
+            /* コンテンツが小さくなったのでspace-betweenで均等配置 */
+            /* padding-bottomでボタンが境界ギリギリにならないよう余裕を確保 */
+            .fv-inner {
+                overflow: hidden;
+                padding: 10px 30px 56px;
+                justify-content: space-between;
+            }
+
+            .fv-top {
+                gap: 12px;
+            }
+
+            .lead-text {
+                font-size: min(clamp(12px, 1.4vw, 18px), 2.2vh);
+                line-height: 1.8;
+            }
+
+            .badge-img {
+                width: 11vh;
+                height: 11vh;
+            }
+
+            .badge-note {
+                font-size: 9px;
+            }
+
+            /* メインコピーを大幅に縮小 */
+            .main-copy {
+                font-size: min(clamp(26px, 3.8vw, 52px), 6.5vh);
+                line-height: 1.35;
+            }
+
+            .fv-bottom {
+                gap: 8px;
+            }
+
+            .bracket-wrapper {
+                padding: 8px 30px;
+                gap: 6px;
+            }
+
+            .en-title {
+                font-size: min(clamp(10px, 1.4vw, 20px), 1.9vh);
+            }
+
+            .ja-title {
+                font-size: min(clamp(13px, 1.5vw, 22px), 2.6vh);
+            }
+
+            .features {
+                row-gap: 4px;
+            }
+
+            .features li {
+                font-size: min(clamp(11px, 1.2vw, 17px), 2vh);
+            }
+
+            .features li::before {
+                width: 18px;
+                height: 18px;
+            }
+
+            /* 通常のボタンをフィーチャーリストの直後に表示（境目配置は不要） */
+            .fv .action-buttons {
+                display: flex;
+            }
+
+            .fv .btn {
+                height: clamp(44px, 6vh, 56px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .fv {
+                height: auto;
+                min-height: 100svh;
+                padding: 40px 0;
+            }
+
+            .fv-inner {
+                padding: 20px;
+                gap: 10px;
+            }
+
+            .fv-top {
+                flex-direction: column-reverse;
+                align-items: center;
+                gap: 30px;
+                width: 100%;
+            }
+
+            .lead-text {
+                text-align: left;
+                width: 100%;
+                font-size: clamp(16px, 4vw, 20px);
+                /* vh制限を解除 */
+            }
+
+            .badges {
+                width: 100%;
+            }
+
+            .badge-img {
+                width: 120px;
+                /* vh制限を解除 */
+                height: 120px;
+            }
+
+            .fv-center {
+                width: 100%;
+                text-align: left;
+            }
+
+            .main-copy {
+                font-size: clamp(22px, 7vw, 40px);
+                /* vh制限を解除 */
+                white-space: nowrap;
+            }
+
+            .sp-br,
+            .sp-only-br {
+                display: block;
+            }
+
+            .en-title {
+                text-align: left;
+                font-size: clamp(10px, 3.8vw, 24px);
+                /* vh制限を解除 */
+                letter-spacing: 0.15em;
+                white-space: nowrap;
+            }
+
+            .ja-title {
+                text-align: left;
+                font-size: clamp(12px, 4.8vw, 28px);
+                /* vh制限を解除 */
+                letter-spacing: 0.1em;
+                white-space: nowrap;
+            }
+
+            .bracket-wrapper {
+                padding: 0;
+                width: 100%;
+                gap: 30px;
+            }
+
+            .bracket-wrapper::before,
+            .bracket-wrapper::after {
+                display: none;
+            }
+
+            .course-info {
+                position: relative;
+                width: 100%;
+                padding: 25px 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .course-info::before,
+            .course-info::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 15px;
+                border: 1px solid rgba(255, 255, 255, 0.4);
+            }
+
+            .course-info::before {
+                left: 0;
+                border-right: none;
+            }
+
+            .course-info::after {
+                right: 0;
+                border-left: none;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                width: 100%;
+                row-gap: 15px;
+            }
+
+            .features li {
+                font-size: clamp(13px, 3.5vw, 16px);
+                /* vh制限を解除 */
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 340px;
+                height: 60px;
+                /* vh制限を解除して固定 */
+                font-size: 15px;
+            }
+        }
+
+        /* --- 新規セクション：インタビュー記事ティザー（FV直下 / 独立クラス） --- */
+        .itv-teaser {
+            background-color: #0b0b0b;
+            border-top: 1px solid rgba(197, 163, 101, 0.35);
+            border-bottom: 1px solid rgba(197, 163, 101, 0.35);
+            padding: 28px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .itv-teaser-link {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            color: #fff;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .itv-teaser-link:hover {
+            opacity: 0.75;
+        }
+
+        .itv-teaser-label {
+            font-family: 'EB Garamond', serif;
+            font-size: 12px;
+            letter-spacing: 0.3em;
+            color: #c5a365;
+            border: 1px solid #c5a365;
+            padding: 6px 14px;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .itv-teaser-body {
+            flex-grow: 1;
+            display: flex;
+            align-items: baseline;
+            gap: 20px;
+            min-width: 0;
+        }
+
+        .itv-teaser-title {
+            font-size: clamp(15px, 1.7vw, 20px);
+            letter-spacing: 0.1em;
+            line-height: 1.6;
+        }
+
+        .itv-teaser-date {
+            font-family: 'EB Garamond', serif;
+            font-size: 13px;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.5);
+            flex-shrink: 0;
+        }
+
+        .itv-teaser-read {
+            font-family: 'EB Garamond', serif;
+            font-size: 14px;
+            letter-spacing: 0.15em;
+            color: #c5a365;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 900px) {
+            .itv-teaser {
+                padding: 24px 20px;
+            }
+
+            .itv-teaser-link {
+                gap: 20px;
+            }
+
+            .itv-teaser-body {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .itv-teaser {
+                padding: 22px 20px;
+            }
+
+            .itv-teaser-link {
+                flex-wrap: wrap;
+                gap: 14px;
+            }
+
+            .itv-teaser-label {
+                font-size: 10px;
+                letter-spacing: 0.25em;
+                padding: 5px 10px;
+            }
+
+            .itv-teaser-body {
+                flex-basis: 100%;
+                order: 3;
+                gap: 8px;
+            }
+
+            .itv-teaser-title {
+                font-size: 15px;
+                line-height: 1.7;
+            }
+
+            .itv-teaser-read {
+                margin-left: auto;
+                font-size: 13px;
+            }
+        }
+
+        /* --- Problem Statement --- */
+        .problem {
+            height: 120svh;
+            min-height: 750px;
+            background-image:
+                url('bg_02.webp');
+            background-size: cover;
+            background-position: center;
+            color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .problem-inner {
+            width: 100%;
+            max-width: 1000px;
+            height: 100%;
+            padding: 40px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 6vh;
+        }
+
+        .ps-header {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .ps-subtitle {
+            font-family: 'EB Garamond', serif;
+            font-size: clamp(12px, 2vw, 20px);
+            letter-spacing: 0.6em;
+            color: #666;
+            margin-left: 0.3em;
+        }
+
+        .ps-title {
+            font-size: clamp(28px, 4vw, 54px);
+            line-height: 1.6;
+            letter-spacing: 0.1em;
+            font-weight: 400;
+        }
+
+        .ps-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3vh;
+            text-align: center;
+        }
+
+        .ps-text {
+            font-size: clamp(14px, 2vw, 22px);
+            line-height: 2;
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 900px) {
+            .problem {
+                height: auto;
+                min-height: 100svh;
+                padding: 80px 20px;
+            }
+
+            .problem-inner {
+                gap: 40px;
+            }
+
+            .ps-title {
+                font-size: clamp(22px, 6vw, 36px);
+            }
+
+            .ps-body {
+                gap: 25px;
+            }
+        }
+
+        /* --- 経営者に問われる覚悟 --- */
+        .awareness {
+            height: 100svh;
+            min-height: 750px;
+            background-image: url('bg_03.webp');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .awareness-inner {
+            width: 100%;
+            max-width: 1000px;
+            height: 100%;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 8vh;
+        }
+
+        .awareness-top {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .awareness-title {
+            color: #c5a365;
+            font-size: clamp(24px, 3.5vw, 40px);
+            letter-spacing: 0.25em;
+            font-weight: 400;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tree-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tree-stem {
+            width: 1px;
+            height: 4vh;
+            min-height: 20px;
+            background-color: #fff;
+        }
+
+        .tree-branch {
+            width: 50%;
+            height: 3vh;
+            min-height: 15px;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #fff;
+        }
+
+        .tree-columns {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .tree-col {
+            width: 50%;
+            text-align: center;
+            padding-top: 3vh;
+        }
+
+        .col-num {
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
+            font-size: clamp(32px, 4vw, 55px);
+            color: #c5a365;
+            margin-bottom: 5px;
+        }
+
+        .col-title {
+            color: #c5a365;
+            font-size: clamp(18px, 2.5vw, 30px);
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            margin-bottom: 15px;
+        }
+
+        .col-text {
+            font-size: clamp(14px, 1.5vw, 16px);
+            line-height: 2;
+            letter-spacing: 0.1em;
+            color: #eee;
+        }
+
+        .concept-wrapper {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .concept-title {
+            display: flex;
+            width: 100%;
+        }
+
+        .concept-title .text {
+            font-family: 'EB Garamond', serif;
+            color: #c5a365;
+            font-size: clamp(14px, 2vw, 20px);
+            letter-spacing: 0.5em;
+            padding: 0 30px;
+            margin-left: 0.25em;
+            line-height: 1.5;
+        }
+
+        .concept-title .line-left,
+        .concept-title .line-right {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .concept-title .line-left::after,
+        .concept-title .line-right::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50%;
+            border-top: 1px solid #c5a365;
+        }
+
+        .concept-title .line-left::after {
+            left: 0;
+            border-left: 1px solid #c5a365;
+        }
+
+        .concept-title .line-right::after {
+            right: 0;
+            border-right: 1px solid #c5a365;
+        }
+
+        .concept-box-inner {
+            width: 100%;
+            border-left: 1px solid #c5a365;
+            border-right: 1px solid #c5a365;
+            border-bottom: 1px solid #c5a365;
+            padding: 40px 60px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .concept-features {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .concept-features li {
+            font-size: clamp(16px, 2vw, 22px);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #fff;
+            letter-spacing: 0.1em;
+        }
+
+        .concept-features li::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background-image: url('check.webp');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 900px) {
+            .awareness {
+                height: auto;
+                padding: 80px 0;
+            }
+
+            .tree-stem,
+            .tree-branch {
+                display: none;
+            }
+
+            .tree-columns {
+                flex-direction: column;
+                gap: 50px;
+            }
+
+            .tree-col {
+                width: 100%;
+                padding-top: 0;
+            }
+
+            .concept-box-inner {
+                padding: 30px 20px;
+            }
+
+            .concept-title .text {
+                padding: 0 15px;
+                letter-spacing: 0.2em;
+            }
+
+            .concept-features li {
+                align-items: flex-start;
+                line-height: 1.6;
+            }
+
+            .concept-features li::before {
+                margin-top: 0;
+            }
+        }
+
+        /* --- Value Proposition --- */
+        .value-prop {
+            padding: 120px 30px;
+            background-attachment: fixed;
+            background-color: #fdfdfd;
+            background-image: url('bg_04.webp');
+            background-size: cover;
+            background-position: center;
+            color: #222;
+            display: flex;
+            justify-content: center;
+        }
+
+        .value-prop-inner {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .value-prop .ps-body {
+            margin-top: 50px;
+            margin-bottom: 70px;
+            gap: 0;
+        }
+
+        .vp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            width: 100%;
+        }
+
+        .vp-col {
+            position: relative;
+            padding-left: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .vp-col::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: #c5a365;
+            opacity: 0.6;
+        }
+
+        .vp-num {
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
+            font-size: clamp(36px, 4vw, 55px);
+            color: #c5a365;
+            line-height: 1;
+        }
+
+        .vp-col-title {
+            font-size: clamp(20px, 2vw, 24px);
+            font-weight: 500;
+            letter-spacing: 0.1em;
+        }
+
+        .vp-col-desc {
+            font-size: clamp(14px, 1.2vw, 16px);
+            color: #72613B;
+            line-height: 1.6;
+            letter-spacing: 0.05em;
+        }
+
+        .vp-separator {
+            border: none;
+            border-top: 1px solid #c5a365;
+            opacity: 0.4;
+            width: calc(100% + 30px);
+            margin: 5px 0 5px -30px;
+        }
+
+        .vp-col-subtitle {
+            font-size: clamp(16px, 1.5vw, 18px);
+            font-weight: 500;
+            line-height: 1.6;
+            letter-spacing: 0.05em;
+        }
+
+        .vp-text-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex-grow: 1;
+        }
+
+        .vp-col-text {
+            font-size: clamp(13px, 1vw, 15px);
+            line-height: 1.8;
+            color: #444;
+            letter-spacing: 0.05em;
+        }
+
+        .vp-text-bottom {
+            color: #72613B;
+            margin-top: auto;
+            font-size: clamp(14px, 1.5vw, 20px);
+        }
+
+        .highlight-text {
+            color: #72613B;
+        }
+
+        .vp-conclusion {
+            margin-top: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .vp-conc-title {
+            font-size: clamp(28px, 4vw, 54px);
+            line-height: 1.6;
+            letter-spacing: 0.15em;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .vp-conc-subtitle {
+            font-size: clamp(16px, 2.5vw, 27px);
+            letter-spacing: 0.15em;
+            text-align: center;
+            margin-top: 60px;
+            margin-bottom: 40px;
+            font-weight: normal;
+        }
+
+        .vp-conc-text-group {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .vp-conc-text {
+            font-size: clamp(14px, 2vw, 22px);
+            line-height: 2;
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 900px) {
+            .value-prop {
+                padding: 80px 20px;
+            }
+
+            .vp-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+
+            .vp-col {
+                padding-left: 20px;
+            }
+
+            .vp-separator {
+                width: calc(100% + 20px);
+                margin-left: -20px;
+            }
+
+            .vp-conclusion {
+                margin-top: 80px;
+            }
+
+            .vp-conc-subtitle {
+                margin-top: 40px;
+                margin-bottom: 30px;
+            }
+
+            .vp-conc-text-group {
+                gap: 30px;
+                margin-bottom: 40px;
+            }
+        }
+
+        /* --- Voices of Alumni --- */
+        .alumni {
+            padding: 120px 20px;
+            background-image: url('bg_05.webp');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .alumni-inner {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .alumni-header {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 80px;
+        }
+
+        .alumni-subtitle {
+            font-family: 'EB Garamond', serif;
+            font-size: clamp(12px, 2vw, 20px);
+            letter-spacing: 0.6em;
+            color: #c5a365;
+            margin-left: 0.3em;
+        }
+
+        .alumni-title {
+            font-size: clamp(28px, 4vw, 54px);
+            line-height: 1.6;
+            letter-spacing: 0.15em;
+            font-weight: 300;
+        }
+
+        .alumni-list {
+            display: flex;
+            flex-direction: column;
+            gap: 120px;
+            width: 100%;
+        }
+
+        .alumni-content {
+            display: flex;
+            gap: 60px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .alumni-content.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .alumni-content.reverse .alumni-text-wrapper {
+            text-align: right;
+        }
+
+        .alumni-content.reverse .alumni-profile {
+            padding-left: 0;
+            padding-right: 30px;
+            align-items: flex-end;
+        }
+
+        .alumni-img-wrapper {
+            width: calc((100% - 60px) * 244 / 880);
+            flex-shrink: 0;
+        }
+
+        .alumni-img-wrapper img {
+            width: 244px;
+            height: 317px;
+            max-width: 100%;
+            height: auto;
+            object-fit: cover;
+            display: block;
+        }
+
+        .alumni-text-wrapper {
+            width: calc((100% - 60px) * 636 / 880);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 40px;
+        }
+
+        .alumni-quote {
+            position: relative;
+            padding: 20px 30px;
+            font-size: clamp(16px, 2.5vw, 27px);
+            line-height: 2.2;
+            letter-spacing: 0.1em;
+            font-weight: 300;
+        }
+
+        .alumni-quote::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15px;
+            height: 100%;
+            border-left: 1px solid #c5a365;
+            border-top: 1px solid #c5a365;
+            border-bottom: 1px solid #c5a365;
+            opacity: 0.8;
+        }
+
+        .alumni-quote::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 15px;
+            height: 100%;
+            border-right: 1px solid #c5a365;
+            border-top: 1px solid #c5a365;
+            border-bottom: 1px solid #c5a365;
+            opacity: 0.8;
+        }
+
+        .alumni-profile {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-left: 30px;
+        }
+
+        .alumni-position {
+            color: #c5a365;
+            font-size: clamp(14px, 1.8vw, 20px);
+            line-height: 1.6;
+            letter-spacing: 0.05em;
+            font-weight: 300;
+        }
+
+        .alumni-name {
+            font-size: clamp(20px, 2.5vw, 27px);
+            letter-spacing: 0.2em;
+            font-weight: 300;
+        }
+
+        @media (max-width: 900px) {
+            .alumni {
+                padding: 80px 20px;
+            }
+
+            .alumni-header {
+                margin-bottom: 50px;
+            }
+
+            .alumni-list {
+                gap: 100px;
+            }
+
+            .alumni-content {
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .alumni-list {
+                gap: 80px;
+            }
+
+            .alumni-content {
+                display: grid;
+                grid-template-columns: 42% 1fr;
+                grid-template-areas:
+                    "img profile"
+                    "quote quote";
+                gap: 30px 20px;
+                align-items: stretch;
+            }
+
+            .alumni-img-wrapper {
+                width: 100%;
+                grid-area: img;
+            }
+
+            .alumni-img-wrapper img {
+                height: auto;
+                aspect-ratio: 3 / 4;
+            }
+
+            .alumni-text-wrapper {
+                display: contents;
+                width: auto;
+            }
+
+            .alumni-profile {
+                padding-left: 0;
+                grid-area: profile;
+                justify-content: space-between;
+                padding: 5px 0;
+            }
+
+            .alumni-position {
+                font-size: clamp(16px, 5vw, 22px);
+            }
+
+            .alumni-name {
+                font-size: clamp(22px, 6.5vw, 30px);
+            }
+
+            .alumni-quote {
+                grid-area: quote;
+                padding: 30px 20px;
+                font-size: clamp(18px, 5.1vw, 26px);
+                line-height: 1.7;
+            }
+
+            .alumni-content.reverse .alumni-text-wrapper {
+                text-align: left;
+            }
+
+            .alumni-content.reverse .alumni-profile {
+                align-items: stretch;
+                padding-right: 0;
+            }
+        }
+
+        /* --- Participating Companies --- */
+        .companies {
+            padding: 120px 20px;
+            background-image: url('bg_06.webp');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #222;
+            display: flex;
+            justify-content: center;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .companies-inner {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .companies-header {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 70px;
+        }
+
+        .companies-title {
+            font-size: clamp(24px, 3.5vw, 46px);
+            line-height: 1.6;
+            letter-spacing: 0.1em;
+            font-weight: 300;
+        }
+
+        .companies-content {
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        .companies-list-title {
+            text-align: center;
+            color: #72613B;
+            font-size: clamp(18px, 2.5vw, 22px);
+            letter-spacing: 0.3em;
+            font-weight: 400;
+            margin-bottom: 40px;
+        }
+
+        .companies-list-all {
+            column-count: 3;
+            column-gap: 40px;
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .companies-list-all li {
+            font-size: clamp(14px, 1.5vw, 18px);
+            letter-spacing: 0.05em;
+            color: #333;
+            line-height: 1.1;
+            margin-bottom: 4px;
+            break-inside: avoid;
+            padding-left: 1.05em;
+            text-indent: -1.05em;
+        }
+
+        .companies-note {
+            text-align: right;
+            font-size: clamp(11px, 1.2vw, 13px);
+            color: #555;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 900px) {
+            .companies {
+                padding: 80px 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .companies-list-all {
+                column-count: auto;
+                line-height: 2.2;
+            }
+
+            .companies-list-all li {
+                display: inline-block;
+                padding-left: 0;
+                text-indent: 0;
+                margin-right: 1.2em;
+                white-space: nowrap;
+            }
+
+            .companies-note {
+                text-align: left;
+                margin-top: 20px;
+            }
+        }
+
+        /* --- Program Director --- */
+        .director {
+            padding: 120px 20px;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .director-inner {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .director-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .director-subtitle {
+            font-family: 'EB Garamond', serif;
+            font-size: 20px;
+            letter-spacing: 0.4em;
+            color: #c5a365;
+            margin-bottom: 15px;
+        }
+
+        .director-main-title {
+            font-size: 27px;
+            letter-spacing: 0.2em;
+            font-weight: 300;
+        }
+
+        .director-content {
+            display: flex;
+            gap: 60px;
+            align-items: flex-end;
+            /* 写真に対してテキスト群を下揃えにする(PC版) */
+            width: 100%;
+        }
+
+        .director-img-wrapper {
+            /* デザインカンプの比率（390px / 900px）に基づき可変に設定 */
+            width: 43.33%;
+            flex-shrink: 0;
+        }
+
+        .director-img-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: grayscale(20%);
+        }
+
+        .director-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .director-name-row {
+            display: flex;
+            align-items: baseline;
+            gap: 20px;
+            padding-bottom: 5px;
+        }
+
+        .director-name-ja {
+            font-size: 27px;
+            letter-spacing: 0.2em;
+            font-weight: 400;
+            color: #c5a365;
+            /* 名前をゴールドに変更 */
+        }
+
+        .director-name-en {
+            font-family: 'EB Garamond', serif;
+            font-size: 16px;
+            letter-spacing: 0.2em;
+            color: #fff;
+            /* 英語表記をホワイトに変更 */
+        }
+
+        .director-rank {
+            font-size: 20px;
+            color: #c5a365;
+            line-height: 1.6;
+            letter-spacing: 0.05em;
+            font-weight: 300;
+        }
+
+        .director-bio {
+            font-size: 16px;
+            line-height: 2;
+            letter-spacing: 0.05em;
+            font-weight: 300;
+            color: #ddd;
+            text-align: justify;
+        }
+
+        @media (max-width: 900px) {
+            .director {
+                padding: 80px 20px;
+            }
+
+            /* タブレットサイズまではPCと同じレイアウト（可変横幅）を維持 */
+            .director-content {
+                gap: 40px;
+                align-items: flex-end;
+            }
+
+            /* 画像の比率設定を維持し、gap分を考慮 */
+            .director-img-wrapper {
+                width: 40%;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            /* スマートフォン時は添付画像のレイアウトに切り替え */
+            .director-content {
+                display: grid;
+                grid-template-columns: 140px 1fr;
+                /* 写真と名前を横並びに */
+                grid-template-areas:
+                    "img name"
+                    "img rank"
+                    "bio bio";
+                gap: 20px;
+                align-items: start;
+            }
+
+            .director-info {
+                display: contents;
+                /* 親のスタイルを解除して中身をGridアイテムにする */
+            }
+
+            .director-img-wrapper {
+                grid-area: img;
+                width: 100%;
+            }
+
+            .director-name-row {
+                grid-area: name;
+                flex-direction: column;
+                gap: 5px;
+                align-items: flex-start;
+                padding-bottom: 0;
+                align-self: start;
+            }
+
+            /* スマートフォン時はお名前もホワイトに変更（画像準拠） */
+            .director-name-ja,
+            .director-name-en {
+                color: #fff;
+            }
+
+            .director-rank {
+                grid-area: rank;
+                font-size: clamp(14px, 4vw, 18px);
+                align-self: start;
+            }
+
+            .director-bio {
+                grid-area: bio;
+                width: 100%;
+                text-align: left;
+                /* スマホ時は左寄せ */
+                margin-top: 10px;
+            }
+        }
+
+        /* --- The Program セクション --- */
+        .program {
+            padding: 120px 20px;
+            background-color: #fff;
+            /* 背景に薄くビジネスシーンのイメージを配置 */
+            background-image: url('bg_07.webp');
+            background-size: cover;
+            background-position: center;
+            color: #222;
+            display: flex;
+            justify-content: center;
+        }
+
+        .program-inner {
+            width: 100%;
+            max-width: 900px;
+            /* セクションの最大時横幅を900pxに設定 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .program-header {
+            text-align: center;
+            margin-bottom: 80px;
+            width: 100%;
+        }
+
+        .program-subtitle {
+            font-family: 'EB Garamond', serif;
+            font-size: 20px;
+            letter-spacing: 0.4em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .program-title {
+            font-size: clamp(28px, 5vw, 54px);
+            /* 最大54px */
+            line-height: 1.4;
+            letter-spacing: 0.1em;
+            font-weight: 300;
+            margin-bottom: 40px;
+        }
+
+        .program-lead {
+            font-size: clamp(16px, 2.5vw, 20px);
+            /* 最大20px */
+            line-height: 2;
+            /* 1行に収めるための文字間隔の調整 */
+            letter-spacing: -0.015em;
+            color: #444;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+            white-space: nowrap;
+            /* PC/タブレットで1行を保証 */
+        }
+
+        .program-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .phase-item {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            width: 100%;
+            padding-bottom: 20px;
+        }
+
+        .phase-number-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex-shrink: 0;
+            width: 120px;
+            font-family: 'EB Garamond', serif;
+        }
+
+        .phase-label {
+            font-size: 29px;
+            color: #222;
+            line-height: 1;
+            margin-bottom: 10px;
+            letter-spacing: 0.2em;
+            /* 字間を広げました */
+            font-weight: 300;
+            /* 細く設定しました */
+        }
+
+        .phase-number {
+            font-size: 90px;
+            font-style: italic;
+            color: #222;
+            line-height: 0.8;
+        }
+
+        .phase-content {
+            flex-grow: 1;
+            padding-top: 5px;
+            position: relative;
+        }
+
+        /* 装飾用の縦棒 */
+        .phase-item {
+            border-left: 1px solid #ccc;
+            padding-left: 40px;
+        }
+
+        .phase-title {
+            font-size: clamp(20px, 3vw, 27px);
+            color: #c5a365;
+            /* ゴールド文字 */
+            letter-spacing: 0.1em;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .phase-desc {
+            font-size: clamp(15px, 2vw, 19px);
+            /* 最大19pxに変更 */
+            line-height: 1.8;
+            color: #333;
+            letter-spacing: 0.02em;
+            /* 文字間を詰めました */
+        }
+
+        @media (max-width: 900px) {
+            .program {
+                padding: 80px 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .program-header {
+                margin-bottom: 60px;
+            }
+
+            .program-lead {
+                text-align: left;
+                white-space: normal;
+                /* スマホでは改行を許可 */
+                letter-spacing: 0.02em;
+            }
+
+            .phase-item {
+                flex-direction: column;
+                gap: 20px;
+                padding-left: 20px;
+            }
+
+            .phase-number-box {
+                flex-direction: row;
+                align-items: baseline;
+                gap: 10px;
+                width: auto;
+            }
+
+            .phase-number {
+                font-size: 70px;
+            }
+
+            .phase-title {
+                margin-bottom: 10px;
+            }
+        }
+
+        /* --- 新規セクション：開催レポート（Field Report / 独立クラス） --- */
+        .rep {
+            padding: 120px 20px;
+            background-color: #fff;
+            color: #222;
+            display: flex;
+            justify-content: center;
+        }
+
+        .rep-inner {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .rep-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .rep-subtitle {
+            margin-bottom: 20px;
+            font-family: 'EB Garamond', serif;
+            font-size: 20px;
+            letter-spacing: 0.4em;
+            color: #666;
+        }
+
+        .rep-title {
+            margin-bottom: 40px;
+            font-size: clamp(28px, 5vw, 54px);
+            line-height: 1.4;
+            letter-spacing: 0.15em;
+            font-weight: 300;
+        }
+
+        .rep-lead {
+            font-size: clamp(14px, 2.5vw, 20px);
+            line-height: 2;
+            color: #444;
+        }
+
+        /* カード枚数が3枚未満でも中央に整列するよう auto-fit を使用 */
+        .rep-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(0, 380px));
+            justify-content: center;
+            gap: 30px;
+            width: 100%;
+        }
+
+        .rep-card {
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border: 1px solid rgba(197, 163, 101, 0.5);
+            color: #222;
+            text-decoration: none;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .rep-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .rep-thumb {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .rep-thumb-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .rep-card-body {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            flex-grow: 1;
+        }
+
+        .rep-meta {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .rep-tag {
+            font-family: 'EB Garamond', serif;
+            font-size: 13px;
+            letter-spacing: 0.3em;
+            color: #c5a365;
+            border: 1px solid #c5a365;
+            padding: 5px 12px;
+            white-space: nowrap;
+        }
+
+        .rep-date {
+            font-family: 'EB Garamond', serif;
+            font-size: 13px;
+            letter-spacing: 0.1em;
+            color: #666;
+        }
+
+        .rep-card-title {
+            font-size: 24px;
+            line-height: 1.7;
+            letter-spacing: 0;
+            font-weight: 400;
+        }
+
+        /* 1200px以下ではタイトル内の改行を無効化 */
+        @media (max-width: 1200px) {
+            .rep-card-title br {
+                display: none;
+            }
+        }
+
+        .rep-card-sub {
+            font-size: 13px;
+            letter-spacing: 0.1em;
+            color: #72613b;
+        }
+
+        .rep-card-text {
+            font-size: 13.5px;
+            line-height: 1.95;
+            color: #444;
+        }
+
+        .rep-more {
+            margin-top: auto;
+            padding-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #c5a365;
+            font-size: 14px;
+            letter-spacing: 0.15em;
+        }
+
+        .rep-arrow {
+            font-family: 'EB Garamond', serif;
+        }
+
+        @media (max-width: 900px) {
+            .rep {
+                padding: 80px 20px;
+            }
+
+            .rep-header {
+                margin-bottom: 45px;
+            }
+
+            .rep-subtitle {
+                font-size: 15px;
+                margin-bottom: 15px;
+            }
+
+            .rep-title {
+                margin-bottom: 25px;
+            }
+
+            .rep-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                max-width: 560px;
+                margin: 0 auto;
+            }
+
+            .rep-thumb {
+                height: 200px;
+            }
+
+            .rep-card-body {
+                padding: 26px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .rep {
+                padding: 70px 20px;
+            }
+
+            .rep-thumb {
+                height: 180px;
+            }
+
+            .rep-card-body {
+                padding: 22px;
+                gap: 12px;
+            }
+
+            .rep-card-title {
+                font-size: 20px;
+            }
+        }
+
+        /* --- 新規セクション：Closing CTA --- */
+        .closing {
+            padding: 120px 20px;
+            /* 階段を上るビジネスパーソンの足元のイメージを背景に設定 */
+            background-color: #000;
+            background-image:
+                url('bg_08.webp');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            /* パララックス効果で奥行きを出す */
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .closing-inner {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .closing-title {
+            font-size: clamp(28px, 5vw, 54px);
+            line-height: 1.6;
+            letter-spacing: 0.15em;
+            font-weight: 400;
+            margin-bottom: 60px;
+        }
+
+        .closing-lead {
+            font-size: clamp(14px, 2.5vw, 22px);
+            line-height: 2.2;
+            letter-spacing: 0.1em;
+            color: #eee;
+            margin-bottom: 100px;
+        }
+
+        .closing-subtitle {
+            font-size: clamp(28px, 5vw, 54px);
+            color: #B7A664;
+            line-height: 1.6;
+            letter-spacing: 0.05em;
+            font-weight: 400;
+            margin-bottom: 40px;
+        }
+
+        .closing-sublead {
+            font-size: clamp(14px, 2.5vw, 22px);
+            color: #B7A664;
+            line-height: 2.2;
+            letter-spacing: 0.1em;
+            margin-bottom: 60px;
+        }
+
+        .closing-cards {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 780px;
+        }
+
+        .closing-card {
+            flex: 1;
+            border-radius: 8px;
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .closing-card:hover {
+            transform: translateY(-5px);
+            opacity: 0.9;
+        }
+
+        .card-download {
+            background-color: rgba(123, 107, 67, 0.85);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-contact {
+            background-color: rgba(194, 178, 115, 0.9);
+            color: #333;
+        }
+
+        .card-contact span.card-action {
+            color: #fff;
+        }
+
+        .card-en {
+            font-family: 'EB Garamond', serif;
+            font-size: clamp(16px, 2vw, 18px);
+            letter-spacing: 0.3em;
+            margin-bottom: 30px;
+        }
+
+        .card-desc {
+            font-size: clamp(12px, 1.5vw, 15px);
+            line-height: 1.8;
+            letter-spacing: 0.05em;
+            margin-bottom: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .card-action {
+            font-size: clamp(18px, 2.5vw, 24px);
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-icon svg,
+        .card-icon img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .closing-apply-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 780px;
+            margin-top: 20px;
+            padding: 22px 40px;
+            background-color: rgba(90, 72, 35, 0.92);
+            color: #e8d9b0;
+            border: 1px solid rgba(197, 163, 101, 0.5);
+            border-radius: 8px;
+            text-decoration: none;
+            font-family: 'Shippori Mincho', serif;
+            font-size: clamp(16px, 2vw, 20px);
+            letter-spacing: 0.15em;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .closing-apply-btn:hover {
+            background-color: rgba(120, 98, 48, 0.95);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 24px rgba(197, 163, 101, 0.3);
+        }
+
+        .closing-apply-arrow {
+            font-family: 'EB Garamond', serif;
+            font-size: 1.3em;
+            line-height: 1;
+            transition: transform 0.3s;
+        }
+
+        .closing-apply-btn:hover .closing-apply-arrow {
+            transform: translateX(4px);
+        }
+
+        @media (max-width: 900px) {
+            .closing {
+                padding: 80px 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .closing-title {
+                margin-bottom: 40px;
+            }
+
+            .closing-lead {
+                margin-bottom: 60px;
+                text-align: left;
+            }
+
+            .closing-subtitle {
+                margin-bottom: 30px;
+            }
+
+            .closing-sublead {
+                margin-bottom: 40px;
+                text-align: left;
+            }
+
+            .closing-cards {
+                flex-direction: column;
+            }
+
+            .closing-card {
+                padding: 40px 20px;
+            }
+        }
+
+        /* --- 新規セクション：Movie --- */
+        .movie {
+            padding: 120px 0 0;
+            /* 指示通り下のpaddingをゼロに */
+            background-color: #fff;
+            /* 指示通り背景を白に */
+            color: #222;
+        }
+
+        .movie-header-inner {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .movie-subtitle {
+            font-family: 'EB Garamond', serif;
+            font-size: 20px;
+            letter-spacing: 0.4em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .movie-title {
+            font-size: clamp(28px, 5vw, 54px);
+            /* 指示通り最大54px */
+            line-height: 1.4;
+            letter-spacing: 0.15em;
+            font-weight: 300;
+            margin-bottom: 40px;
+        }
+
+        .movie-lead {
+            font-size: clamp(14px, 2.5vw, 20px);
+            line-height: 2;
+            color: #444;
+        }
+
+        /* カルーセル全体のラッパー */
+        .movie-carousel-wrap {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            background-color: #ECECEC;
+            /* ご指定の背景色 */
+            padding-top: 20px;
+            /* 上に20pxの余白 */
+            padding-bottom: 80px;
+            /* 下に80pxの余白 */
+        }
+
+        /* スクロールするトラック部分 */
+        .movie-track {
+            display: flex;
+            gap: 30px;
+            padding: 0 20px;
+            overflow-x: auto;
+            /* スマホのネイティブスワイプを有効化 */
+            -webkit-overflow-scrolling: touch;
+            /* スワイプの慣性スクロールを滑らかに */
+            -ms-overflow-style: none;
+            /* IE, Edge でスクロールバーを非表示 */
+            scrollbar-width: none;
+            /* Firefox でスクロールバーを非表示 */
+            cursor: grab;
+        }
+
+        .movie-track::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari でスクロールバーを非表示 */
+        }
+
+        .movie-track.active {
+            cursor: grabbing;
+            /* ドラッグ中のカーソル */
+        }
+
+        /* 個別の動画アイテム */
+        .movie-item {
+            flex: 0 0 auto;
+            /* 幅を固定して縮ませない */
+            width: clamp(260px, 70vw, 496px);
+            /* 指示通り最大496px。スマホ時は画面の70%を占めるように計算 */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .movie-thumb {
+            width: 100%;
+            aspect-ratio: 496 / 280;
+            /* 指示通り 496:280 の比率を維持 */
+            background-color: #ddd;
+            overflow: hidden;
+        }
+
+        .movie-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            /* 画像保存などのドラッグ動作を防ぎ、スワイプしやすくする */
+        }
+
+        .movie-caption {
+            font-size: clamp(14px, 2vw, 20px);
+            /* 指示通り最大20px */
+            color: #333;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 900px) {
+            .movie {
+                padding: 80px 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .movie-header-inner {
+                margin-bottom: 40px;
+            }
+
+            .movie-lead {
+                text-align: left;
+            }
+
+            .movie-track {
+                gap: 15px;
+                /* スマホ時はバナー間の隙間を少し狭める */
+            }
+        }
+
+        /* --- 新規セクション：About JMI --- */
+        .about-jmi {
+            padding: 120px 20px;
+            background-color: #fff;
+            color: #222;
+            display: flex;
+            justify-content: center;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .about-jmi-inner {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+        }
+
+        .about-jmi-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-jmi-logo {
+            width: 45%;
+            max-width: 360px;
+            flex-shrink: 0;
+        }
+
+        .about-jmi-logo img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .about-jmi-catch {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .about-jmi-subtitle {
+            font-family: 'EB Garamond', serif;
+            font-size: clamp(14px, 2vw, 20px);
+            /* 指示通り最大20px */
+            letter-spacing: 0.5em;
+            /* 字間を広めに */
+            color: #72613B;
+            margin-left: 0.2em;
+        }
+
+        .about-jmi-title {
+            font-size: clamp(24px, 4vw, 36px);
+            /* 指示通り最大36px */
+            line-height: 1.6;
+            letter-spacing: 0.1em;
+            font-weight: 400;
+        }
+
+        .about-jmi-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .about-jmi-heading {
+            font-size: clamp(32px, 5vw, 54px);
+            /* 指示通り最大54px */
+            letter-spacing: 0.15em;
+            font-weight: 400;
+        }
+
+        .about-jmi-text {
+            font-size: clamp(14px, 1.8vw, 17px);
+            line-height: 2.2;
+            letter-spacing: 0.05em;
+            text-align: justify;
+            /* 文章の両端を揃えて美しく見せる */
+            color: #333;
+        }
+
+        @media (max-width: 900px) {
+            .about-jmi {
+                padding: 80px 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .about-jmi-inner {
+                gap: 60px;
+            }
+
+            .about-jmi-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 40px;
+            }
+
+            .about-jmi-logo {
+                width: 80%;
+            }
+
+            .about-jmi-title {
+                font-size: clamp(22px, 6vw, 28px);
+            }
+        }
+
+        /* --- 新規セクション：Footer --- */
+        .footer {
+            padding: 80px 20px 40px;
+            background-color: #000;
+            color: #fff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .footer-inner {
+            width: 100%;
+            max-width: 800px;
+            /* 指示通り最大幅を800pxに設定 */
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 60px;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .footer-nav-title {
+            font-family: 'EB Garamond', serif;
+            font-size: clamp(18px, 2.5vw, 22px);
+            color: #c5a365;
+            /* ゴールド */
+            letter-spacing: 0.15em;
+            font-weight: 400;
+        }
+
+        .footer-nav-lists {
+            display: flex;
+            gap: clamp(40px, 6vw, 100px);
+            /* 2列の間の隙間 */
+        }
+
+        .footer-nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-nav-list li a {
+            font-family: 'EB Garamond', serif;
+            font-size: clamp(16px, 2vw, 18px);
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            transition: opacity 0.3s;
+        }
+
+        .footer-nav-list li a:hover {
+            opacity: 0.7;
+        }
+
+        /* Report配下の記事リンク */
+        .footer-nav-sublist {
+            list-style: none;
+            margin: 12px 0 0 1em;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-nav-sublist li a {
+            font-family: 'Shippori Mincho', serif;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.75);
+            letter-spacing: 0.06em;
+        }
+
+        .footer-nav-sublist li a[aria-current="page"] {
+            color: #c5a365;
+        }
+
+        /* プライバシーポリシーは少し下を開けて配置 */
+        .privacy-item {
+            margin-top: 30px;
+        }
+
+        .footer-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            /* PC時は右寄せ */
+            gap: 50px;
+        }
+
+        .footer-contact-btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            color: #111;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-family: sans-serif;
+            /* ボタンはゴシック系 */
+            font-weight: 600;
+            font-size: clamp(14px, 2vw, 16px);
+            letter-spacing: 0.05em;
+            transition: opacity 0.3s;
+        }
+
+        .footer-contact-btn:hover {
+            opacity: 0.8;
+        }
+
+        .footer-official {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            /* PC時は右寄せ */
+            gap: 15px;
+        }
+
+        .official-text {
+            font-family: 'EB Garamond', serif;
+            font-size: clamp(16px, 2vw, 18px);
+            color: #c5a365;
+            /* ゴールド */
+            letter-spacing: 0.15em;
+        }
+
+        .footer-logo {
+            width: 260px;
+            /* サンプル画像のサイズ調整 */
+        }
+
+        .footer-logo img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .footer-address {
+            font-family: sans-serif;
+            /* 住所はゴシック系 */
+            font-size: clamp(12px, 1.5vw, 14px);
+            letter-spacing: 0.05em;
+            color: #fff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+        }
+
+        .copyright {
+            font-family: 'EB Garamond', serif;
+            font-size: clamp(12px, 1.5vw, 14px);
+            color: #c5a365;
+            /* ゴールド */
+            letter-spacing: 0.1em;
+        }
+
+        /* スマホ・タブレット時の調整 */
+        @media (max-width: 768px) {
+            .footer-top {
+                flex-direction: column;
+                gap: 60px;
+            }
+
+            /* スマホ時は右寄せを解除して左寄せに */
+            .footer-right {
+                align-items: flex-start;
+                gap: 40px;
+            }
+
+            .footer-official {
+                align-items: flex-start;
+            }
+
+            .copyright {
+                line-height: 1.5;
+            }
+        }
+
+        /* --- FV Load Animations --- */
+        @keyframes fvFadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fv-top .lead-text {
+            animation: fvFadeInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            opacity: 0;
+        }
+
+        .fv-top .badges-wrapper {
+            animation: fvFadeInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .fv-center .main-copy {
+            animation: fvFadeInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 0.4s;
+            opacity: 0;
+        }
+
+        .fv-bottom {
+            animation: fvFadeInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 0.6s;
+            opacity: 0;
+        }
+
+        /* --- スクロールフェードイン アニメーション --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: opacity, transform;
+        }
+
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
