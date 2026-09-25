@@ -21,7 +21,11 @@
 @media(max-width:600px){.event-video-start{font-size:14px;padding:12px 16px}.event-interview{gap:18px}}
 
 /* Shared EMC video sections */
-.event-video-collection{display:grid;gap:32px;scroll-margin-top:95px}
+.event-video-collection{display:grid;gap:24px;scroll-margin-top:95px}
 .event-video-collection>.iv-h2{margin:0}
-.iv-body .event-video-heading{margin:0;font-size:22px;line-height:1.6;font-weight:500;color:#a38c56}
-@media(max-width:600px){.event-video-collection{gap:28px}.iv-body .event-video-heading{font-size:20px}}
+.event-video-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:start}
+.event-video-grid .event-interview{gap:12px}
+.iv-body .event-video-heading{margin:0;font-size:16px;line-height:1.6;font-weight:500;color:#a38c56;min-height:3.2em}
+.event-video-grid .event-video-start{font-size:12px;padding:8px 12px}
+.iv-body .event-video-grid .event-video-caption{font-size:12px;line-height:1.7}
+@media(max-width:600px){.event-video-grid{gap:8px}.iv-body .event-video-heading{font-size:12px}.event-video-grid .event-video-start{font-size:10px;padding:5px 7px}.iv-body .event-video-grid .event-video-caption{font-size:10px}.event-video-grid .event-interview{gap:8px}}
