@@ -19,3 +19,9 @@
 .iv-body .event-video-caption{margin:0;font-size:14px;color:#666;line-height:1.8}
 .iv-body .event-video-status{margin:0;font-size:14px;line-height:1.8;color:#8c291e}
 @media(max-width:600px){.event-video-start{font-size:14px;padding:12px 16px}.event-interview{gap:18px}}
+
+/* Shared EMC video sections */
+.event-video-collection{display:grid;gap:32px;scroll-margin-top:95px}
+.event-video-collection>.iv-h2{margin:0}
+.iv-body .event-video-heading{margin:0;font-size:22px;line-height:1.6;font-weight:500;color:#a38c56}
+@media(max-width:600px){.event-video-collection{gap:28px}.iv-body .event-video-heading{font-size:20px}}
